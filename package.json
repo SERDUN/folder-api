@@ -1,0 +1,21 @@
+{
+  "name": "folder-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SERDUN/NODE-JS-STUDY/issues"
+  },
+  "homepage": "https://github.com/SERDUN/NODE-JS-STUDY#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
