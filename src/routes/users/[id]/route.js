@@ -1,9 +1,8 @@
 import {deleteUserById, getUserById, updateUserById} from "../../../services/index.js";
 
-
 export function get(req, res) {
 	try {
-		const user = getUserById(Number(req.params.resourceId));
+		const user = getUserById(Number(req.params['id']));
 		res.writeHead(200, {'Content-Type': 'application/json'});
 		res.end(JSON.stringify(user));
 	} catch (r) {
@@ -13,7 +12,7 @@ export function get(req, res) {
 }
 
 export async function put(req, res) {
-	const id = Number(req.params.resourceId);
+	const id = Number(req.params['id']);
 	try {
 		const data = JSON.parse(req.body);
 		const updated = updateUserById(id, {id, name: data.name});

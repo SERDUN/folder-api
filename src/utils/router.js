@@ -5,9 +5,9 @@ export async function dispatch(route, request, response) {
 	const {url, method} = request;
 	const normalizedMethod = method.toLowerCase() === 'delete' ? 'delete_' : method.toLowerCase();
 	console.log("Incoming request:", url);
-	const {routePath, id} = matchRoute(route, url.split('/').filter(Boolean));
+	const {routePath, params} = matchRoute(route, url.split('/').filter(Boolean));
 
-	console.log("Matched route:", routePath, "with ID:", id);
+	console.log("Matched route:", routePath, "with params:", params);
 
 	if (!routePath) {
 		console.error("Route not found for:", url);
@@ -15,9 +15,10 @@ export async function dispatch(route, request, response) {
 		return response.end('Not Found');
 	}
 
-	if (id !== null) {
-		console.log(`ID found: ${id}`);
-		request.params = {...request.params, resourceId: id};
+	console.log("Url: ", url);
+
+	if (params.size > 0 !== null) {
+		request.params = {...request.params, ...params};
 	}
 
 	try {
@@ -62,13 +63,13 @@ function matchRoute(route, path) {
 		const routeSegment = urlPattern.split('/').filter(Boolean);
 		if (routeSegment.length !== path.length) continue;
 
-		let id = null;
+		const params = {};
 		let isMatch = true;
 
 		for (let i = 0; i < routeSegment.length; i++) {
 			const segment = routeSegment[i];
 			if (segment.startsWith(':')) {
-				id = path[i];
+				params[segment.slice(1)] = path[i];
 			} else if (segment !== path[i]) {
 				isMatch = false;
 				break;
@@ -76,7 +77,7 @@ function matchRoute(route, path) {
 		}
 
 		if (isMatch) {
-			bestMatch = {routePath: filePath, id};
+			bestMatch = {routePath: filePath, params};
 			// If this is no dynamic segments, stop searching — it's the best match :)
 			if (!urlPattern.includes(':')) break;
 		}
